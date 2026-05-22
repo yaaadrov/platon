@@ -16,7 +16,7 @@ export default function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative h-screen bg-secondary overflow-hidden"
+      className="relative h-[85vh] md:h-screen bg-secondary overflow-hidden pt-[env(safe-area-inset-top)]"
     >
       <motion.div
         style={{ scale, opacity }}
@@ -41,7 +41,7 @@ export default function Hero() {
       </motion.div>
 
       <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        className="absolute bottom-[env(safe-area-inset-bottom,2rem)] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.2, ease: "easeOut", delay: 1.2 }}

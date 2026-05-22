@@ -22,6 +22,7 @@ export const metadata: Metadata = {
   title: "Мастерская Платона — Авторская мебель из дерева",
   description:
     "Мастерская Платона строится на уважении к материалу, ремеслу и процессу. Авторская мебель из дерева.",
+  viewport: "width=device-width, initial-scale=1, viewport-fit=cover",
 };
 
 export default function RootLayout({
