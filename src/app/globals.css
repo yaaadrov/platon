@@ -20,7 +20,11 @@
   }
 }
 
+html {
+  background: var(--color-additional);
+}
+
 body {
-  background: var(--color-main);
+  background: var(--color-additional);
   color: var(--color-neutral);
 }

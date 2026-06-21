@@ -16,7 +16,7 @@ export default function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative h-[85vh] md:h-screen bg-secondary overflow-hidden pt-[env(safe-area-inset-top)]"
+      className="relative h-[100svh] md:h-screen bg-secondary overflow-hidden pt-[env(safe-area-inset-top)]"
     >
       <motion.div
         style={{ scale, opacity }}
