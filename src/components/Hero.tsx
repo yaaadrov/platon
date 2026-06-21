@@ -20,7 +20,7 @@ export default function Hero() {
     >
       <motion.div
         style={{ scale, opacity }}
-        className="absolute inset-0 flex flex-col items-center justify-center"
+        className="absolute inset-0 flex flex-col items-center justify-center pb-[8vh]"
       >
         <motion.img
           src="/images/logo.png"
@@ -41,15 +41,23 @@ export default function Hero() {
       </motion.div>
 
       <motion.div
-        className="absolute bottom-[env(safe-area-inset-bottom,2rem)] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        className="absolute bottom-[env(safe-area-inset-bottom,2rem)] left-1/2 -translate-x-1/2 flex flex-col items-center gap-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.2, ease: "easeOut", delay: 1.2 }}
       >
-        <span className="font-poiret text-main/50 text-[0.85rem] tracking-[0.1em]">
-          листайте вниз
-        </span>
-        <div className="w-px h-10 bg-main animate-pulse-line" />
+        <a
+          href={`tel:${"+7 (921) 386-44-64".replace(/[^\d+]/g, "")}`}
+          className="font-poiret text-main text-[clamp(1.1rem,2.2vw,1.45rem)] tracking-[0.06em] transition-colors duration-300 hover:text-main/65"
+        >
+          +7 (921) 386-44-64
+        </a>
+        <div className="flex flex-col items-center gap-2">
+          <span className="font-poiret text-main/50 text-[0.85rem] tracking-[0.1em]">
+            листайте вниз
+          </span>
+          <div className="w-px h-10 bg-main animate-pulse-line" />
+        </div>
       </motion.div>
     </section>
   );

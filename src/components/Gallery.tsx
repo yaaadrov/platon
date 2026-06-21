@@ -3,6 +3,15 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 
+const furnitureImages = [
+  { src: "/images/furniture/img1.png", alt: "Изделие из дерева ручной работы" },
+  { src: "/images/furniture/img2.jpeg", alt: "Изделие из дерева ручной работы" },
+  { src: "/images/furniture/img3.png", alt: "Изделие из дерева ручной работы" },
+  { src: "/images/furniture/img4.png", alt: "Изделие из дерева ручной работы" },
+  { src: "/images/furniture/img5.png", alt: "Изделие из дерева ручной работы" },
+  { src: "/images/furniture/img6.png", alt: "Изделие из дерева ручной работы" },
+];
+
 interface StickyCardProps {
   i: number;
   src: string;
@@ -10,50 +19,38 @@ interface StickyCardProps {
   progress: ReturnType<typeof useScroll>["scrollYProgress"];
   range: [number, number];
   targetScale: number;
+  total: number;
 }
 
-function StickyCard({
-  i,
-  src,
-  alt,
-  progress,
-  range,
-  targetScale,
-  totalCards,
-}: StickyCardProps & { totalCards: number }) {
+function StickyCard({ i, src, alt, progress, range, targetScale, total }: StickyCardProps) {
+  // The card shrinks (and settles back) only once the NEXT card begins to
+  // rise over it, so the topmost card always reads at full size.
   const scale = useTransform(progress, range, [1, targetScale]);
-  // Rotate only after this card has been "passed" — next card starts covering it
-  // The next card starts appearing at range [(i+1) * step, 1], so rotation
-  // should begin when the next card enters and end shortly after
-  const step = (1 / totalCards) * 0.75;
-  const rotateStart = (i + 1) * step;
-  const rotateEnd = Math.min(rotateStart + step * 2, 1);
-  const rotate = useTransform(progress, [rotateStart, rotateEnd], [0, -8]);
 
   return (
-    <div className="sticky top-0 flex items-center justify-center">
+    <div className="sticky top-0 flex h-[100svh] items-center justify-center">
       <motion.div
         style={{
           scale,
-          rotate,
-          top: `calc(-5vh + ${i * 20 + 250}px)`,
+          // Each card sits a little lower than the one beneath it, so the
+          // stack stays visible at the edges instead of perfectly overlapping.
+          top: `calc(${(i - total + 1) * 28}px)`,
         }}
-        className="relative -top-1/4 w-[92vw] h-[65vw] md:w-[900px] md:h-[600px] rounded-2xl overflow-hidden border border-secondary/30 origin-top"
+        className="relative aspect-[3/4] w-[72vw] max-w-[460px] origin-top overflow-hidden rounded-[20px] border border-secondary/15 shadow-[0_40px_90px_-30px_rgba(0,0,0,0.85)] will-change-transform"
       >
-        <img src={src} alt={alt} className="h-full w-full object-cover" />
+        <img
+          src={src}
+          alt={alt}
+          loading="lazy"
+          className="h-full w-full object-cover"
+        />
+        {/* Soft inner vignette: seats the photo against the dark gallery and
+            adds depth without overlaying any text on the work. */}
+        <div className="pointer-events-none absolute inset-0 rounded-[20px] shadow-[inset_0_0_120px_rgba(0,0,0,0.35)]" />
       </motion.div>
     </div>
   );
 }
-
-const furnitureImages = [
-  { src: "/images/furniture/img1.jpg", alt: "Изделие 1" },
-  { src: "/images/furniture/img2.jpg", alt: "Изделие 2" },
-  { src: "/images/furniture/img3.jpg", alt: "Изделие 3" },
-  { src: "/images/furniture/img4.jpg", alt: "Изделие 4" },
-  { src: "/images/furniture/img5.jpg", alt: "Изделие 5" },
-  { src: "/images/furniture/img6.jpg", alt: "Изделие 6" },
-];
 
 export default function Gallery() {
   const container = useRef<HTMLDivElement>(null);
@@ -62,27 +59,27 @@ export default function Gallery() {
     offset: ["start start", "end end"],
   });
 
+  const total = furnitureImages.length;
+
   return (
     <section className="bg-additional">
-      <div className="pt-25 pb-4">
-        <h2 className="font-sovmod uppercase text-[clamp(2rem,4vw,3.5rem)] text-secondary tracking-[0.15em] text-center">
+      <div className="pt-25 pb-2">
+        <h2 className="text-center font-sovmod text-[clamp(2rem,4vw,3.5rem)] uppercase tracking-[0.15em] text-secondary">
           Изделия
         </h2>
-        <div className="w-10 h-px bg-secondary/50 mx-auto mt-4" />
-        <p className="font-poiret text-secondary/40 text-[0.95rem] tracking-[0.08em] text-center mt-6 animate-pulse-line">
+        <div className="mx-auto mt-4 h-px w-10 bg-secondary/50" />
+        <p className="mt-6 text-center font-poiret text-[0.95rem] tracking-[0.08em] text-secondary/40 animate-pulse-line">
           листайте, чтобы увидеть изделия
         </p>
       </div>
 
       <div
         ref={container}
-        className="relative flex w-full flex-col items-center justify-center pt-[60px] pb-[100vh]"
+        className="relative flex w-full flex-col items-center pt-[40px] pb-[12vh]"
       >
         {furnitureImages.map((item, i) => {
-          const targetScale = Math.max(
-            0.5,
-            1 - (furnitureImages.length - i - 1) * 0.1
-          );
+          // Trailing cards rest slightly smaller, building a gentle depth stack.
+          const targetScale = 1 - (total - i - 1) * 0.035;
           return (
             <StickyCard
               key={`card_${i}`}
@@ -90,9 +87,9 @@ export default function Gallery() {
               src={item.src}
               alt={item.alt}
               progress={scrollYProgress}
-              range={[i * (1 / furnitureImages.length) * 0.75, 1]}
+              range={[i * (1 / total), 1]}
               targetScale={targetScale}
-              totalCards={furnitureImages.length}
+              total={total}
             />
           );
         })}

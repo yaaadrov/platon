@@ -14,7 +14,7 @@ export default function About() {
           viewport={{ once: true, amount: 0.3 }}
         >
           <img
-            src="/images/master.jpg"
+            src="/images/платон.png"
             alt="Мастер"
             className="w-full max-h-[500px] md:max-h-none object-cover border-[8px] border-secondary"
           />
